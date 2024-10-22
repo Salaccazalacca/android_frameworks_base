@@ -112,6 +112,8 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
         updateMediaDisappearParameters();
 
         mTunerService.addTunable(mView, QS_SHOW_BRIGHTNESS);
+        mTunerService.addTunable(mView, QSPanel.QS_CUSTOM_HEADER);
+        mTunerService.addTunable(mView, QSPanel.QS_CUSTOM_HEADER_STYLE);
         mView.updateResources();
         if (mView.isListening()) {
             refreshAllTiles();

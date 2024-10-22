@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+** Copyright (C) 2024 AfterlifeOS Project
+** 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+-->
+<FrameLayout
+    android:id="@+id/qs_hyper_container"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.android.systemui.animation.view.LaunchableLinearLayout
+            android:gravity="start|center"
+            android:layout_gravity="start|center"
+            android:orientation="horizontal"
+            android:id="@+id/qs_hyper_wifi_button"
+            android:background="@drawable/qs_custom_header_bg_button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/qs_tile_height"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/qs_hyper_data_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_gravity="start|center"
+                android:id="@+id/qs_hyper_wifi_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_statusbar_wifi"
+                android:tint="?android:textColorPrimary" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="?android:textColorPrimary"
+                    android:ellipsize="marquee"
+                    android:id="@+id/qs_hyper_wifi_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quick_settings_wifi_label"
+                    android:singleLine="true"
+                    android:textDirection="locale"
+                    android:textAlignment="viewStart"
+                    android:layout_marginStart="16dp" />
+                <TextView
+                    android:textColor="?android:textColorPrimary"
+                    android:ellipsize="marquee"
+                    android:id="@+id/qs_hyper_wifi_summary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Off"
+                    android:singleLine="true"
+                    android:textDirection="locale"
+                    android:textAlignment="viewStart"
+                    android:layout_marginStart="16dp" />
+            </LinearLayout>
+        </com.android.systemui.animation.view.LaunchableLinearLayout>
+        <com.android.systemui.animation.view.LaunchableLinearLayout
+            android:gravity="end|center"
+            android:layout_gravity="end|center"
+            android:orientation="horizontal"
+            android:id="@+id/qs_hyper_data_button"
+            android:background="@drawable/qs_custom_header_bg_button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/qs_tile_height"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/qs_hyper_wifi_button"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_gravity="start|center"
+                android:id="@+id/qs_hyper_data_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_swap_vert"
+                android:tint="?android:textColorPrimary" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="?android:textColorPrimary"
+                    android:ellipsize="marquee"
+                    android:id="@+id/qs_hyper_data_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quick_settings_cellular_detail_title"
+                    android:singleLine="true"
+                    android:textDirection="locale"
+                    android:layout_marginStart="16dp" />
+                <TextView
+                    android:textColor="?android:textColorPrimary"
+                    android:ellipsize="marquee"
+                    android:id="@+id/qs_hyper_data_summary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Off"
+                    android:singleLine="true"
+                    android:textDirection="locale"
+                    android:layout_marginStart="16dp" />
+            </LinearLayout>
+        </com.android.systemui.animation.view.LaunchableLinearLayout>
+        <com.android.systemui.afterlife.qs.QSMediaHeaderView
+            android:id="@+id/qs_controls_media_container"
+            android:background="@android:color/transparent"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="@dimen/qs_custom_header_corner_radius"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toStartOf="@id/qs_controls_slider_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qs_hyper_wifi_button">
+            <com.android.systemui.animation.view.LaunchableImageView
+                android:id="@+id/qs_media_header_player_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/qs_custom_header_bg_button"
+                android:scaleType="centerCrop" />
+            <include
+                layout="@layout/afterlife_qs_hyper_media" />
+        </com.android.systemui.afterlife.qs.QSMediaHeaderView>
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:id="@+id/qs_controls_slider_container"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/qs_controls_media_container"
+            app:layout_constraintTop_toBottomOf="@id/qs_hyper_data_button">
+            <com.android.systemui.qs.BrightnessSlider
+                android:id="@+id/qs_controls_brightness_slider"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="@color/qs_controls_surface_color"
+                app:cardCornerRadius="@dimen/qs_controls_slider_corner_radius"
+                app:cardElevation="0dp">
+                <ImageView
+                    android:layout_gravity="bottom|center"
+                    android:id="@+id/qs_controls_brightness_slider_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="16dp" />
+            </com.android.systemui.qs.BrightnessSlider>
+            <com.android.systemui.qs.VolumeSlider
+                android:id="@+id/qs_controls_volume_slider"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardBackgroundColor="@color/qs_controls_surface_color"
+                app:cardCornerRadius="@dimen/qs_controls_slider_corner_radius"
+                app:cardElevation="0dp">
+                <ImageView
+                    android:layout_gravity="bottom|center"
+                    android:id="@+id/qs_controls_volume_slider_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_volume_media" />
+            </com.android.systemui.qs.VolumeSlider>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

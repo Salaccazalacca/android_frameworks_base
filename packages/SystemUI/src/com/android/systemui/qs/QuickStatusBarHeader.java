@@ -20,6 +20,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,19 +38,74 @@ public class QuickStatusBarHeader extends FrameLayout {
 
     private boolean mExpanded;
     private boolean mQsDisabled;
+    
+    private final TelephonyManager mTelephonyManager;
+    private final int mSubscriptionId = -1; 
+    
+    private ViewGroup mQSHyperHeader;
+    private View mHyperWifiButton, mHyperDataButton;
+    private ImageView mHyperWifiIcon, mHyperDataIcon;
+    private TextView mHyperWifiTitle, mHyperDataTitle;
+    private TextView mHyperWifiSummary, mHyperDataSummary;
+    
+    private Runnable mUpdateRunnableWifi, mUpdateRunnableData;
 
     protected QuickQSPanel mHeaderQsPanel;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mHeaderQsPanel = findViewById(R.id.quick_qs_panel);
+        
+        mQSHyperHeader = findViewById(R.id.qs_hyper_container);
+        
+        mHyperWifiButton = findViewById(R.id.qs_hyper_wifi_button);
+        mHyperWifiIcon = findViewById(R.id.qs_hyper_wifi_icon);
+        mHyperWifiTitle = findViewById(R.id.qs_hyper_wifi_title);
+        mHyperWifiSummary = findViewById(R.id.qs_hyper_wifi_summary);
+        mHyperDataButton = findViewById(R.id.qs_hyper_data_button);
+        mHyperDataIcon = findViewById(R.id.qs_hyper_data_icon);
+        mHyperDataTitle = findViewById(R.id.qs_hyper_data_title);
+        mHyperDataSummary = findViewById(R.id.qs_hyper_data_summary);
+        
+        mHyperWifiButton.setOnClickListener(this);
+        mHyperDataButton.setOnClickListener(this);
+        mHyperWifiButton.setOnLongClickListener(this);
+        mHyperDataButton.setOnLongClickListener(this);
 
         updateResources();
+        
+        startUpdateWifiButtonStateAsync();
+        startUpdateDataButtonStateAsync();
+    }
+    
+    @Override
+    public void onClick(View v) {
+    
+        } else if (v == mHyperWifiButton) {
+			updateWifiButton();
+        } else if (v == mHyperDataButton) {
+			updateDataButton();
+		
+    }
+     
+    @Override
+    public boolean onLongClick(View v) {
+    
+        } else if (v == mHyperWifiButton) {
+            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
+                Settings.ACTION_WIFI_SETTINGS), 0);
+            return true;   
+        } else if (v == mHyperDataButton) {
+        	mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
+                Settings.ACTION_NETWORK_OPERATOR_SETTINGS), 0);
+            return true;
+        
     }
 
     @Override
@@ -66,6 +122,37 @@ public class QuickStatusBarHeader extends FrameLayout {
         } else {
             return false;
         }
+    }
+    
+    private TelephonyManager getTelephonyManager() {
+        if (!SubscriptionManager.isValidSubscriptionId(mSubscriptionId)) {
+            mSubscriptionId = SubscriptionManager.getDefaultDataSubscriptionId();
+        }
+        if (!SubscriptionManager.isValidSubscriptionId(mSubscriptionId)) {
+            int[] activeSubscriptionIdList = SubscriptionManager.from(mContext).getActiveSubscriptionIdList();
+            if (!ArrayUtils.isEmpty(activeSubscriptionIdList)) {
+                mSubscriptionId = activeSubscriptionIdList[0];
+            }
+        }
+        return ((TelephonyManager) mContext.getSystemService(TelephonyManager.class)).createForSubscriptionId(mSubscriptionId);
+    }
+    
+    private void updateQSCustomHeaderStyle() {
+        if (mQSCustomHeaderEnabled) {    
+            if (mQSCustomHeaderStyle == 0) {
+                mQSDefaultHeader.setVisibility(View.GONE);
+                mQSAnimHeader.setVisibility(View.VISIBLE);
+                mQSHyperHeader.setVisibility(View.GONE);
+                } else if (mQSCustomHeaderStyle == 1) {
+                mQSDefaultHeader.setVisibility(View.GONE);
+                mQSAnimHeader.setVisibility(View.GONE);
+                mQSHyperHeader.setVisibility(View.VISIBLE);
+                }           
+            } else {
+            mQSDefaultHeader.setVisibility(View.VISIBLE);
+            mQSAnimHeader.setVisibility(View.GONE);
+            mQSHyperHeader.setVisibility(View.GONE);
+        }   
     }
 
     void updateResources() {
@@ -91,6 +178,142 @@ public class QuickStatusBarHeader extends FrameLayout {
         }
         mHeaderQsPanel.setLayoutParams(qqsLP);
     }
+    
+    private boolean isWifiEnabled() {
+        try {
+            return mWifiManager.isWifiEnabled();
+        } catch (Exception unused) {
+            return false;
+        }
+    }
+    
+    private void setWifiEnabled(boolean enable) {
+        try {
+            mWifiManager.setWifiEnabled(enable);
+        } catch (Exception unused) {
+        }
+    }
+    
+    public void updateWifiButton() {
+        synchronized (this) {
+            setWifiEnabled(!isWifiEnabled());
+        }
+        startUpdateWifiButtonStateAsync();
+    }
+    
+    public void updateWifiButtonState() {
+        if (mHyperWifiButton == null 
+        || mHyperWifiIcon == null 
+        || mHyperWifiTitle == null 
+        || mHyperWifiSummary == null) return;
+        Drawable background = mHyperWifiButton.getBackground();
+        if (isWifiEnabled()) {
+            background.setTint(colorActive);
+            mHyperWifiIcon.setColorFilter(colorLabelActive);
+            mHyperWifiTitle.setTextColor(colorLabelActive);
+            mHyperWifiSummary.setText(getWifiSsid());
+            mHyperWifiSummary.setTextColor(colorLabelActive);
+        } else {
+            background.setTint(colorInactive);
+            mHyperWifiIcon.setColorFilter(colorLabelInactive);
+            mHyperWifiTitle.setTextColor(colorLabelInactive);
+            mHyperWifiSummary.setText("Off");
+            mHyperWifiSummary.setTextColor(colorLabelInactive);
+        }
+    }
+    
+    public final void startUpdateWifiButtonStateAsync() {
+        AsyncTask.execute(
+                new Runnable() {
+                    public void run() {
+                        startUpdateWifiButtonState();
+                    }
+                });
+    }
+    
+    public void startUpdateWifiButtonState() {
+        Runnable runnable = mUpdateRunnableWifi;
+        if (runnable == null) {
+            mUpdateRunnableWifi =
+                    new Runnable() {
+                        public void run() {
+                            updateWifiButtonState();
+                            scheduleWifiButtonUpdate();
+                        }
+                    };
+        } else {
+            mHandler.removeCallbacks(runnable);
+        }
+        scheduleWifiButtonUpdate();
+    }
+    
+    public final void scheduleWifiButtonUpdate() {
+        Runnable runnable;
+        if ((runnable = mUpdateRunnableWifi) != null) {
+            mHandler.postDelayed(runnable, 250);
+        }
+    }
+    
+    public void updateDataButton() {
+        synchronized (this) {
+            getTelephonyManager().setDataEnabled(!getTelephonyManager().isDataEnabled());
+        }
+        startUpdateDataButtonStateAsync();
+    }
+    
+    
+    public void updateDataButtonState() {
+        if (mHyperDataButton == null 
+        || mHyperDataIcon == null 
+        || mHyperDataTitle == null 
+        || mHyperDataSummary == null) return;
+        Drawable background = mHyperDataButton.getBackground();
+        if (getTelephonyManager().isDataEnabled()) {
+            background.setTint(colorActive);
+            mHyperDataIcon.setColorFilter(colorLabelActive);
+            mHyperDataTitle.setTextColor(colorLabelActive);
+            mHyperDataSummary.setText(getSlotCarrierName());
+            mHyperDataSummary.setTextColor(colorLabelActive);
+        } else {
+            background.setTint(colorInactive);
+            mHyperDataIcon.setColorFilter(colorLabelInactive);
+            mHyperDataTitle.setTextColor(colorLabelInactive);
+            mHyperDataSummary.setText("Off");
+            mHyperDataSummary.setTextColor(colorLabelInactive);
+        }
+    }
+    
+    public void startUpdateDataButtonStateAsync() {
+        AsyncTask.execute(
+                new Runnable() {
+                    public void run() {
+                        startUpdateDataButtonState();
+                    }
+                });
+    }
+    
+    public void startUpdateDataButtonState() {
+        Runnable runnable = mUpdateRunnableData;
+        if (runnable == null) {
+            mUpdateRunnableData =
+                    new Runnable() {
+                        public void run() {
+                            updateDataButtonState();
+                            scheduleDataButtonUpdate();
+                        }
+                    };
+        } else {
+            mHandler.removeCallbacks(runnable);
+        }
+        scheduleDataButtonUpdate();
+    }
+    
+    public void scheduleDataButtonUpdate() {
+        Runnable runnable;
+        if ((runnable = mUpdateRunnableData) != null) {
+            mHandler.postDelayed(runnable, 250);
+        }
+    }
 
     public void setExpanded(boolean expanded, QuickQSPanelController quickQSPanelController) {
         if (mExpanded == expanded) return;
@@ -112,4 +335,5 @@ public class QuickStatusBarHeader extends FrameLayout {
         lp.setMarginEnd(marginEnd);
         view.setLayoutParams(lp);
     }
+    
 }

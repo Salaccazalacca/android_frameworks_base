@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+** Copyright (C) 2024 AfterlifeOS Project
+** 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.android.systemui.animation.view.LaunchableLinearLayout
+        android:id="@+id/qs_media_header_player_container"
+        android:background="@drawable/rounded_clip"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:elevation="2dp"
+        android:clipToOutline="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/qs_media_header_album"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true" />
+    </com.android.systemui.animation.view.LaunchableLinearLayout>
+    <ImageView
+        android:id="@+id/qs_media_header_icon_app"
+        android:background="@drawable/qs_media_oplus_player_button_background"
+        android:padding="4dp"
+        android:visibility="gone"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_media_oplus_player_icon_app"
+        android:scaleType="centerInside"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="?android:colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?android:colorPrimary" />    
+    <com.android.systemui.animation.view.LaunchableImageView
+        android:id="@+id/qs_media_header_output_switcher"
+        android:background="@null"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/ic_media_cast_player_output_switcher"
+        android:scaleType="centerInside"
+        android:tint="?android:textColorPrimary"
+        android:layout_marginEnd="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/qs_header_custom"
+        android:gravity="start|center"
+        android:layout_gravity="start|center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginStart="0dp"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qs_media_header_player_container">
+        <TextView
+            android:textAppearance="@style/TextAppearance.QS.TileLabel"
+            android:textSize="@dimen/qs_media_oplus_player_title_size"
+            android:textColor="@color/qs_media_oplus_title_color"
+            android:ellipsize="marquee"
+            android:id="@+id/qs_media_header_player_title"
+            android:paddingTop="2dp"
+            android:focusableInTouchMode="true"
+            android:layout_width="wrap_content"
+            android:maxWidth="128dp"
+            android:layout_height="wrap_content"
+            android:text="@string/qs_media_oplus_default_title"
+            android:singleLine="true"
+            android:lineSpacingExtra="0.0sp"
+            android:textDirection="locale"
+            android:layout_marginStart="0dp" />
+        <TextView
+            android:textAppearance="@style/TextAppearance.QS.TileLabel"
+            android:textSize="@dimen/qs_media_oplus_player_subtitle_size"
+            android:textStyle="normal"
+            android:textColor="@color/qs_media_oplus_title_color"
+            android:ellipsize="marquee"
+            android:id="@+id/qs_media_header_player_subtitle"
+            android:paddingBottom="2dp"
+            android:maxWidth="100dp"
+            android:focusableInTouchMode="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="-2dp"
+            android:text="Music"
+            android:singleLine="true"
+            android:lineSpacingExtra="0.0sp"
+            android:alpha="0.8"
+            android:textDirection="locale"
+            android:fontWeight="400" />
+    </LinearLayout>
+    <ImageButton
+        android:id="@+id/qs_media_header_player_action_prev"
+        android:background="@null"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_media_header_player_act_prev"
+        android:scaleType="centerInside"
+        android:layoutDirection="ltr"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintTop_toBottomOf="@+id/qs_header_custom"
+        app:layout_constraintStart_toStartOf="parent" />
+    <ImageButton
+        android:id="@+id/qs_media_header_player_play_pause"
+        android:background="@null"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerInside"
+        android:layoutDirection="ltr"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qs_header_custom"
+        app:layout_constraintEnd_toStartOf="@+id/qs_media_header_player_action_next"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/qs_media_header_player_action_prev" />
+    <ImageButton
+        android:id="@+id/qs_media_header_player_action_next"
+        android:background="@null"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_media_header_player_act_next"
+        android:scaleType="centerInside"
+        android:layoutDirection="ltr"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qs_header_custom"
+        app:layout_constraintHorizontal_bias="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

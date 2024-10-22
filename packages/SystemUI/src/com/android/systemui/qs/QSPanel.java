@@ -54,6 +54,8 @@ public class QSPanel extends LinearLayout implements Tunable {
 
     public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
     public static final String QS_SHOW_HEADER = "qs_show_header";
+    private static final String QS_CUSTOM_HEADER = "system:qs_custom_header_enabled";
+    private static final String QS_CUSTOM_HEADER_STYLE = "system:qs_custom_header_style";
 
     private static final String TAG = "QSPanel";
 
@@ -109,6 +111,9 @@ public class QSPanel extends LinearLayout implements Tunable {
      * false. It influences available accessibility actions.
      */
     private boolean mCanCollapse = true;
+    
+    private boolean mQSCustomHeaderEnabled;
+    private int mQSCustomHeaderStyle;
 
     public QSPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -324,6 +329,16 @@ public class QSPanel extends LinearLayout implements Tunable {
         if (QS_SHOW_BRIGHTNESS.equals(key) && mBrightnessView != null) {
             updateViewVisibilityForTuningValue(mBrightnessView, newValue);
         }
+        
+        case QS_CUSTOM_HEADER:
+        mQSCustomHeaderEnabled = TunerService.parseIntegerSwitch(newValue, false);
+        updateResources();
+        break;
+        case QS_CUSTOM_HEADER_STYLE:
+        mQSCustomHeaderStyle = TunerService.parseInteger(newValue, 0);
+        updateResources();
+        break;
+        
     }
 
     private void updateViewVisibilityForTuningValue(View view, @Nullable String newValue) {
@@ -372,12 +387,30 @@ public class QSPanel extends LinearLayout implements Tunable {
 
     protected void updatePadding() {
         final Resources res = mContext.getResources();
-        int paddingTop = res.getDimensionPixelSize(R.dimen.qs_panel_padding_top);
+        int paddingTop = res.getDimensionPixelSize(R.dimen.qs_media_oplus_padding_top);
+        int paddingTopHyper = res.getDimensionPixelSize(R.dimen.qs_header_hyper_padding_top);
         int paddingBottom = res.getDimensionPixelSize(R.dimen.qs_panel_padding_bottom);
-        setPaddingRelative(getPaddingStart(),
-                paddingTop,
+        if (mQSCustomHeaderEnabled) {
+            // qs panel padding top anim style    
+            if (mQSCustomHeaderStyle == 0) {
+                setPaddingRelative(getPaddingStart(),
+                mSceneContainerEnabled ? 0 : paddingTop,
                 getPaddingEnd(),
-                paddingBottom);
+                mSceneContainerEnabled ? 0 : paddingBottom);
+                // qs panel padding top hyper style    
+                } else if (mQSCustomHeaderStyle == 1) {
+                setPaddingRelative(getPaddingStart(),
+                mSceneContainerEnabled ? 0 : paddingTopHyper,
+                getPaddingEnd(),
+                mSceneContainerEnabled ? 0 : paddingBottom);
+            }                    
+        } else {
+        // qs panel padding top afterlife style    
+        setPaddingRelative(getPaddingStart(),
+                mSceneContainerEnabled ? 0 : paddingTop,
+                getPaddingEnd(),
+                mSceneContainerEnabled ? 0 : paddingBottom);
+        }        
     }
 
     void addOnConfigurationChangedListener(OnConfigurationChangedListener listener) {
