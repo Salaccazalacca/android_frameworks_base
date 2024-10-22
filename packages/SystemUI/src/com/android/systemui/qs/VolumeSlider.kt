@@ -78,7 +78,7 @@ class VolumeSlider(context: Context, attrs: AttributeSet? = null) : VerticalSlid
         val newProgress = (currentVolume * 100 / maxVolume)
         setSliderProgress(newProgress)
         progressRect.top = (1 - newProgress / 100f) * measuredHeight
-        volumeIcon?.let { updateIconTint(it) }
+        updateVolumeIcon()
         invalidate()
     }
     
@@ -90,6 +90,15 @@ class VolumeSlider(context: Context, attrs: AttributeSet? = null) : VerticalSlid
         updateProgressRect()
     }
     
+    private fun updateVolumeIcon() {
+        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+        if (currentVolume == 0) {
+            volumeIcon?.setImageResource(R.drawable.ic_volume_mute)
+        } else {
+            volumeIcon?.setImageResource(R.drawable.ic_volume_active)
+        }
+    }
+    
     private fun toggleMute() {
         val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
@@ -99,6 +108,7 @@ class VolumeSlider(context: Context, attrs: AttributeSet? = null) : VerticalSlid
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
         }
         updateVolumeProgress()
+        updateVolumeIcon()
     }
 
     override fun updateProgressRect() {

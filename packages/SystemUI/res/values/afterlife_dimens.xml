@@ -152,8 +152,9 @@
     
     <!-- QS Custom Header -->
     <dimen name="qs_custom_header_corner_radius">18dp</dimen>
-    <dimen name="qs_header_hyper_padding_top">290dp</dimen>
+    <dimen name="qs_header_hyper_padding_top">380dp</dimen>
+    <dimen name="qs_hyper_tile_height">80dp</dimen>
     
     <!-- QS vertical slider -->
-    <dimen name="qs_controls_slider_corner_radius">18dp</dimen>
+    <dimen name="qs_controls_slider_corner_radius">14dp</dimen>
 </resources>

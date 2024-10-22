@@ -36,6 +36,9 @@ import com.android.systemui.util.LargeScreenUtils;
  */
 public class QuickStatusBarHeader extends FrameLayout {
 
+    private int colorSecondaryLabelActive = Utils.getColorAttrDefaultColor(mContext, android.R.attr.textColorSecondaryInverse);
+    private int colorSecondaryLabelInactive = Utils.getColorAttrDefaultColor(mContext, android.R.attr.textColorSecondary);
+
     private boolean mExpanded;
     private boolean mQsDisabled;
     
@@ -212,13 +215,13 @@ public class QuickStatusBarHeader extends FrameLayout {
             mHyperWifiIcon.setColorFilter(colorLabelActive);
             mHyperWifiTitle.setTextColor(colorLabelActive);
             mHyperWifiSummary.setText(getWifiSsid());
-            mHyperWifiSummary.setTextColor(colorLabelActive);
+            mHyperWifiSummary.setTextColor(colorSecondaryLabelActive);
         } else {
             background.setTint(colorInactive);
             mHyperWifiIcon.setColorFilter(colorLabelInactive);
             mHyperWifiTitle.setTextColor(colorLabelInactive);
             mHyperWifiSummary.setText("Off");
-            mHyperWifiSummary.setTextColor(colorLabelInactive);
+            mHyperWifiSummary.setTextColor(colorSecondaryLabelInactive);
         }
     }
     
@@ -273,13 +276,13 @@ public class QuickStatusBarHeader extends FrameLayout {
             mHyperDataIcon.setColorFilter(colorLabelActive);
             mHyperDataTitle.setTextColor(colorLabelActive);
             mHyperDataSummary.setText(getSlotCarrierName());
-            mHyperDataSummary.setTextColor(colorLabelActive);
+            mHyperDataSummary.setTextColor(colorSecondaryLabelActive);
         } else {
             background.setTint(colorInactive);
             mHyperDataIcon.setColorFilter(colorLabelInactive);
             mHyperDataTitle.setTextColor(colorLabelInactive);
             mHyperDataSummary.setText("Off");
-            mHyperDataSummary.setTextColor(colorLabelInactive);
+            mHyperDataSummary.setTextColor(colorSecondaryLabelInactive);
         }
     }
     

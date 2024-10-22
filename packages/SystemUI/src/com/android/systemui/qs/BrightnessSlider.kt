@@ -151,7 +151,7 @@ class BrightnessSlider(context: Context, attrs: AttributeSet? = null) :
 
     private fun updateBrightnessIcon() {
         brightnessIcon?.apply {
-            setImageResource(if (isAutomaticBrightnessEnabled()) R.drawable.ic_qs_brightness_auto_on else R.drawable.ic_qs_brightness_auto_off)
+            setImageResource(if (isAutomaticBrightnessEnabled()) R.drawable.ic_qs_brightness_auto_on_new else R.drawable.ic_qs_brightness_auto_off_new)
             updateIconTint(this)
         }
     }
